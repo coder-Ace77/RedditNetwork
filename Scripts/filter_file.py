@@ -315,9 +315,10 @@ def get_date(subname, input_file, output_file, from_date, to_date):
  
  
  
-sublists = pd.read_csv("Scripts/sublist.csv")
-print(sublists)
+subreddits = pd.read_csv("Scripts/sublist.csv", header=None)
 
+sublists = subreddits[0].tolist()  # Extract only subreddit names as a list
+print(sublists)
 
 # Better to compile the info of individual subs into a single file 
 
@@ -328,5 +329,5 @@ to_date = datetime.strptime("2024-12-31", "%Y-%m-%d")
 		
 for subname in sublists:
     # Replace it with a text file filled with subreddit names
-	input_file = f"./subreddits24/{subname}.zst"
+	input_file = f"./subreddits24/{subname}_submissions.zst"
 	get_date(subname, input_file, output_file, from_date, to_date)
