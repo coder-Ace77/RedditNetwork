@@ -1,0 +1,4 @@
+pandas
+networkx
+zstandard
+libtorrent
