@@ -96,7 +96,7 @@ def update_subreddit_from_submissions_zst(
 
 def extract_subreddit_submissions(
     subreddit_name: str,
-    input_file:str,
+    input_file: str,
     from_date: datetime,
     to_date: datetime,
     json_path="./output/posts.json",

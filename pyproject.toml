@@ -3,7 +3,10 @@ name = "reddit-network-project"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Shubham Daule",email = "shubhambd@iitbhilai.ac.in"},
+    {name = "RV Nayan",email = "ramachandrav@iitbhilai.ac.in"},
+    {name = "Adil",email = "mohdadil@iitbhilai.ac.in"},
+    {name = "Aayush Kataria",email = "aayushka@iitbhilai.ac.in"}
 ]
 readme = "README.md"
 requires-python = ">= 3.10"

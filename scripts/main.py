@@ -101,10 +101,10 @@ def main():
         to_date = datetime.strptime(args.to_date, "%Y-%m-%d")
         print(f"\tfrom: {from_date}\n\tto: {to_date}")
     except ValueError:
-        print(f"Error: Invalid date format. Please use 'YYYY-MM-DD'.", file=sys.stderr)
+        print("Error: Invalid date format. Please use 'YYYY-MM-DD'.", file=sys.stderr)
         sys.exit(1)
 
-    print('-'*40)
+    print("-" * 40)
     print("Downloading...")
     dumped_data_paths = dump_subreddit_submissions(
         subreddits, download_dir, torrent_path
@@ -112,7 +112,7 @@ def main():
     failed_downloads = set(subreddits) - set(dumped_data_paths.keys())
     if len(failed_downloads) > 0:
         print(f"Failed to download {failed_downloads}")
-    print('-'*40)
+    print("-" * 40)
 
     for sub in dumped_data_paths:
         print(f"Processing {sub}...")
@@ -125,7 +125,7 @@ def main():
             graph_path,
             args.post_threshold,
         )
-        print('-'*40)
+        print("-" * 40)
 
 
 if __name__ == "__main__":

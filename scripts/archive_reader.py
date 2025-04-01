@@ -109,7 +109,6 @@ def read_lines_zst(file_name: str):
         reader.close()
 
 
-
 if __name__ == "__main__":
     subreddits = pd.read_csv("data/sublist.csv", header=None)
 
@@ -124,6 +123,3 @@ if __name__ == "__main__":
     for subname in sublists:
         # Replace it with a text file filled with subreddit names
         input_file = f"./data/archived_submissions/{subname}_submissions.zst"
-        get_date(
-            subname, input_file, output_file, from_date, to_date
-        )  # Also takes in minimum no of posts
