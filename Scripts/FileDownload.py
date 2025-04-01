@@ -11,7 +11,7 @@ wanted_files = set()
 with open(csv_file, newline='') as file:
     reader = csv.reader(file)
     for row in reader:
-        wanted_files.add(row[0].strip())  # Convert to lowercase for matching
+        wanted_files.add(row[0].strip().lower())
 
 # Define torrent paths
 torrent_path = "reddit.torrent"
@@ -45,8 +45,6 @@ for idx in range(torrent_info.num_files()):
 
     # Check if file matches any entry in the CSV
     for partial_name in wanted_files:
-        print(f"{partial_name}_submissions")
-
         if f"{partial_name}_submissions.zst" == filename:
             full_path = os.path.join(download_dir, filename)
 
