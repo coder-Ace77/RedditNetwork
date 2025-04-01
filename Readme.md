@@ -44,6 +44,16 @@ Or, you can directly provide subreddits as command-line arguments:
 python scripts/main.py --json-output results.json --graph-output results.graphml --post-threshold 5 --from-date 2021-01-01 --to-date 2022-12-31 subreddit1 subreddit2 subreddit3
 ```
 
+#### With default options
+
+```bash
+python scripts/main.py --file subreddits.csv
+```
+
+```bash
+python scripts/main.py subreddit1 subreddit2 subreddit3
+```
+
 If neither `--file` nor `values` is provided, the script will output an error message.
 
 ### Output Files
