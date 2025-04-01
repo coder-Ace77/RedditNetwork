@@ -8,7 +8,7 @@ import shutil
 csv_file = "Scripts/sublist.csv"
 wanted_files = set()
 
-with open(csv_file, newline='') as file:
+with open(csv_file, newline="") as file:
     reader = csv.reader(file)
     for row in reader:
         wanted_files.add(row[0].strip().lower())
@@ -39,7 +39,7 @@ selected_indices = []
 
 for idx in range(torrent_info.num_files()):
     file_path = file_storage.file_path(idx).lower()
-    
+
     # Extract only the filename (ignore folder structure)
     filename = os.path.basename(file_path)
 
@@ -68,7 +68,9 @@ while True:
     file_progress = torrent_handle.file_progress()
 
     # Check if all selected files are fully downloaded
-    if all(file_progress[idx] >= file_storage.file_size(idx) for idx, _ in selected_indices):
+    if all(
+        file_progress[idx] >= file_storage.file_size(idx) for idx, _ in selected_indices
+    ):
         print("\nAll selected files downloaded. Stopping torrent...")
         session.remove_torrent(torrent_handle)  # Removes torrent but keeps files
         break
@@ -81,8 +83,8 @@ while True:
 # **Move files to the final location (flatten the structure)**
 for idx, filename in selected_indices:
     # Find the actual downloaded file path
-    subdir_file_path = os.path.join(download_dir, file_storage.file_path(idx))  
-    final_path = os.path.join(download_dir, filename)  
+    subdir_file_path = os.path.join(download_dir, file_storage.file_path(idx))
+    final_path = os.path.join(download_dir, filename)
 
     # Move only if it exists in a subdirectory
     if os.path.exists(subdir_file_path) and subdir_file_path != final_path:

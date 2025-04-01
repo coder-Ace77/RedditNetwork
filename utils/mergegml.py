@@ -3,10 +3,12 @@ import csv
 
 # Read the GraphML file names from graphml_files.csv
 graphml_files = []
-with open('utils/graphml_files.csv', newline='') as file:
+with open("utils/graphml_files.csv", newline="") as file:
     reader = csv.reader(file)
     for row in reader:
-        graphml_files.append(row[0].strip())  # Assuming the filenames are in the first column
+        graphml_files.append(
+            row[0].strip()
+        )  # Assuming the filenames are in the first column
 
 # Initialize an empty graph
 merged_graph = nx.Graph()
@@ -15,7 +17,7 @@ merged_graph = nx.Graph()
 for graphml_file in graphml_files:
     print(f"Loading {graphml_file}...")
     try:
-        graph = nx.read_graphml(f'utils/{graphml_file}')
+        graph = nx.read_graphml(f"utils/{graphml_file}")
         # Merge the current graph into the merged_graph
         merged_graph.update(graph)
         print(f"Successfully merged {graphml_file}")

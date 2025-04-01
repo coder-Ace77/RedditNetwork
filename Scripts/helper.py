@@ -3,8 +3,15 @@ import json
 import os
 import networkx as nx
 
-def update_json(subreddit_name, csv_path="./output/output.csv", json_path="./output/posts.json", graph_path="./output/graph.graphml", min_posts=1):
-    
+
+def update_json(
+    subreddit_name,
+    csv_path="./output/output.csv",
+    json_path="./output/posts.json",
+    graph_path="./output/graph.graphml",
+    min_posts=1,
+):
+
     # Check if CSV file exists and is non-empty
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
         print("CSV file is empty or missing. Skipping processing.")
@@ -34,12 +41,15 @@ def update_json(subreddit_name, csv_path="./output/output.csv", json_path="./out
         subreddit_data[subreddit_name] = {}  # Initialize subreddit if not present
 
     for user, date in zip(user_ids, post_dates):
-        if user == "u/[deleted]":  
+        if user == "u/[deleted]":
             continue  # Ignore deleted users
 
-        if user not in subreddit_data[subreddit_name]:  
+        if user not in subreddit_data[subreddit_name]:
             # New user: Add entry
-            subreddit_data[subreddit_name][user] = {"postdates": [date], "postfrequency": 1}
+            subreddit_data[subreddit_name][user] = {
+                "postdates": [date],
+                "postfrequency": 1,
+            }
         else:
             # Existing user: Append date if it's not a duplicate
             if date not in subreddit_data[subreddit_name][user]["postdates"]:
@@ -47,7 +57,8 @@ def update_json(subreddit_name, csv_path="./output/output.csv", json_path="./out
                 subreddit_data[subreddit_name][user]["postfrequency"] += 1
 
     subreddit_data[subreddit_name] = {
-        user: details for user, details in subreddit_data[subreddit_name].items() 
+        user: details
+        for user, details in subreddit_data[subreddit_name].items()
         if details["postfrequency"] >= min_posts
     }
 
@@ -63,12 +74,14 @@ def update_json(subreddit_name, csv_path="./output/output.csv", json_path="./out
             G = nx.read_graphml(graph_path)
             print("Existing graph loaded.")
         except Exception as e:
-            print(f"Warning: Unable to load existing graph. Creating a new one. Error: {e}")
+            print(
+                f"Warning: Unable to load existing graph. Creating a new one. Error: {e}"
+            )
             G = nx.Graph()
     else:
         print("No existing graph found. Creating a new one.")
         G = nx.Graph()
-    
+
     # Add subreddit node if not already present
     if subreddit_name not in G:
         G.add_node(subreddit_name, bipartite=0, type="subreddit")
@@ -80,14 +93,12 @@ def update_json(subreddit_name, csv_path="./output/output.csv", json_path="./out
 
         if user not in G:
             G.add_node(user, bipartite=1, type="user")
-        
+
         if not G.has_edge(user, subreddit_name):  # Ensure user is the source
             G.add_edge(user, subreddit_name, weight=details["postfrequency"])
         else:
             G[user][subreddit_name]["weight"] += details["postfrequency"]
 
-
     # Export the updated graph
     nx.write_graphml(G, graph_path)
     print(f"Graph updated and exported to {graph_path}")
-
