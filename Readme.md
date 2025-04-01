@@ -8,7 +8,7 @@ Steps to Run After Cloning this repo
 
 3. Fetching the Data - Run the File [filter_file.py](/Scripts/filter_file.py) after finshing step 2. The file will be exported to the newly created output folder.
 
-
+4. If you have multiple json graphml files and want to merge them, change their names and list them in [graphml_files.csv](utils/graphml_files.csv) and run this [code](utils/mergegml.py). Move these renamed files to utils folder
 
 
 [Link to Sublist](https://docs.google.com/spreadsheets/d/1KMybtp6lWoG154eiNmh-FWVlCs40z8NnljzhYfHPM2c/edit?gid=952481735#gid=952481735)

@@ -202,7 +202,8 @@ def get_date(subname, input_file, output_file, from_date, to_date):
 		else:
 			log.error(f"Unsupported output format {output_format}")
 			sys.exit()
-
+		
+		
 		file_size = os.stat(input_file).st_size
 		created = None
 		matched_lines = 0
@@ -330,4 +331,4 @@ to_date = datetime.strptime("2024-12-31", "%Y-%m-%d")
 for subname in sublists:
     # Replace it with a text file filled with subreddit names
 	input_file = f"./subreddits24/{subname}_submissions.zst"
-	get_date(subname, input_file, output_file, from_date, to_date)
+	get_date(subname, input_file, output_file, from_date, to_date) # Also takes in minimum no of posts
