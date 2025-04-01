@@ -34,4 +34,4 @@ def scrape_reddit_best(n_pages=5):
     print("Scraping complete. Data saved to 'reddit_best_communities.csv'.")
 
 # Run for first 5 pages
-scrape_reddit_best(n_pages=20)
+scrape_reddit_best(n_pages=100)

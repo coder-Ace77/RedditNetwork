@@ -15,4 +15,7 @@ Steps to Run After Cloning this repo
 
 [Link to Doc](https://docs.google.com/document/d/1GeB1Ji9qhLvGSaW175c7pY75rD81mBwAudBi1SpCxBg/edit?tab=t.1687nqsr0gjy)
 
-[Top Subreddits list by memeber](https://docs.google.com/spreadsheets/d/1E5PU18h8G-GGRYponNVJ_Crhu5LkyEnOXQr7Vie353A/edit?usp=sharing)
+[Top Subreddits list by members](https://docs.google.com/spreadsheets/d/1E5PU18h8G-GGRYponNVJ_Crhu5LkyEnOXQr7Vie353A/edit?usp=sharing)
+
+
+[FinaList](https://docs.google.com/spreadsheets/d/1oT-zug2Rv-x4MXzl_3ykpTg8_wSVj2f8ZTKANL40TSc/edit?usp=sharing)
