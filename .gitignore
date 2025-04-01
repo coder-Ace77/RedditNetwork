@@ -1,4 +1,4 @@
 logs/*
-subreddits24/*
+data/archived_submissions/
 output/*
 Scripts/__pycache__/*

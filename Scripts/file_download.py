@@ -99,5 +99,5 @@ if __name__ == "__main__":
 
     # Define torrent paths
     torrent_path = "reddit.torrent"
-    download_dir = "./subreddits24"  # Custom download directory
+    download_dir = "./data/archived_submissions/"  # Custom download directory
     dump_subreddit_submissions(subs, download_dir, torrent_path)
