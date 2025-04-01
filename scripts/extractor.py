@@ -23,6 +23,7 @@ def load_existing_json_data(json_path: str) -> dict:
 
 
 def update_subreddit_from_submissions_zst(
+    input_file: str,
     subreddit_name: str,
     subreddit_data: dict,
     from_date: datetime,
@@ -32,7 +33,6 @@ def update_subreddit_from_submissions_zst(
     if subreddit_name not in subreddit_data:
         subreddit_data[subreddit_name] = {}  # Initialize subreddit if not present
 
-    input_file = f"./data/archived_submissions/{subreddit_name}_submissions.zst"
     file_size = os.stat(input_file).st_size
     created: datetime = datetime.now()
     matched_lines = 0
@@ -95,9 +95,10 @@ def update_subreddit_from_submissions_zst(
 
 
 def extract_subreddit_submissions(
-    subreddit_name,
-    from_date,
-    to_date,
+    subreddit_name: str,
+    input_file:str,
+    from_date: datetime,
+    to_date: datetime,
     json_path="./output/posts.json",
     graph_path="./output/graph.graphml",
     min_posts=1,
@@ -105,7 +106,7 @@ def extract_subreddit_submissions(
     subreddit_data = load_existing_json_data(json_path)
 
     update_subreddit_from_submissions_zst(
-        subreddit_name, subreddit_data, from_date, to_date, min_posts
+        input_file, subreddit_name, subreddit_data, from_date, to_date, min_posts
     )
 
     # Save updated JSON file
@@ -162,6 +163,5 @@ if __name__ == "__main__":
     to_date = datetime.strptime("2024-12-31", "%Y-%m-%d")
 
     for subname in sublists:
-        # Replace it with a text file filled with subreddit names
         input_file = f"./data/archived_submissions/{subname}_submissions.zst"
-        extract_subreddit_submissions(subname, from_date, to_date)
+        extract_subreddit_submissions(subname, input_file, from_date, to_date)

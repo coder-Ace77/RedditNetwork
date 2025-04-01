@@ -1,4 +1,4 @@
-logs/*
+logs/
 data/archived_submissions/
-output/*
-Scripts/__pycache__/*
+output/
+Scripts/__pycache__/

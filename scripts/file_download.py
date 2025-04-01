@@ -1,7 +1,7 @@
 import os
 import shutil
 import time
-from typing import Collection
+from typing import Collection, Dict
 
 import libtorrent as lt
 import pandas as pd
@@ -9,7 +9,8 @@ import pandas as pd
 
 def dump_subreddit_submissions(
     subnames: Collection[str], download_dir: str, torrent_path: str
-):
+) -> Dict[str, str]:
+    file_paths = {}
     os.makedirs(download_dir, exist_ok=True)
     torrent_info = lt.torrent_info(torrent_path)
 
@@ -27,28 +28,28 @@ def dump_subreddit_submissions(
     file_storage = torrent_info.files()
     selected_indices = []
 
-    sub_submission_files = [f"{subname}_submissions.zst" for subname in subnames]
     for idx in range(torrent_info.num_files()):
         file_path = file_storage.file_path(idx)
 
         # Extract only the filename (ignore folder structure)
         filename = os.path.basename(file_path)
 
-        # Check if file matches any entry in the CSV
-        if filename.lower() in sub_submission_files:
-            full_path = os.path.join(download_dir, filename)
+        for subname in subnames:
+            if filename.lower() == f"{subname}_submissions.zst":
+                full_path = os.path.join(download_dir, filename)
+                file_paths[subname] = full_path
 
-            # Skip if the file is already downloaded
-            if os.path.exists(full_path) and os.path.getsize(full_path) > 0:
-                print(f"Skipping (already exists): {filename}")
-            else:
-                torrent_handle.file_priority(idx, 1)  # Enable download
-                selected_indices.append((idx, filename))
-                print(f"Selected for download: {filename}")
+                # Skip if the file is already downloaded
+                if os.path.exists(full_path) and os.path.getsize(full_path) > 0:
+                    print(f"Skipping (already exists): {filename}")
+                else:
+                    torrent_handle.file_priority(idx, 1)  # Enable download
+                    selected_indices.append((idx, filename))
+                    print(f"Selected for download: {filename}")
 
     if not selected_indices:
         print("No new matching files found. Exiting.")
-        exit()
+        return file_paths
 
     # Start downloading
     print(f"Downloading {len(selected_indices)} selected files...")
@@ -90,6 +91,7 @@ def dump_subreddit_submissions(
                 os.rmdir(dir_path)
 
     print("All files moved to:", download_dir)
+    return file_paths
 
 
 if __name__ == "__main__":
