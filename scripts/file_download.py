@@ -95,7 +95,7 @@ def dump_subreddit_submissions(
 
 
 if __name__ == "__main__":
-    csv_file = "Scripts/sublist.csv"
+    csv_file = "data/sublist.csv"
     df = pd.read_csv(csv_file, names=["subs"])
     subs = {sub.strip().lower() for sub in df["subs"]}
 
