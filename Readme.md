@@ -26,10 +26,10 @@ You can provide the following arguments when running the script:
   - Example: `--download-dir ./data/reddit_submissions/`
 - **`--post-threshold`**: Minimum number of posts for a user to be considered. Default is `1`.
   - Example: `--post-threshold 5`
-- **`--from-date`**: Start date in `'YYYY-MM-DD'` format. Default is `2020-01-01`.
-  - Example: `--from-date 2021-01-01`
-- **`--to-date`**: End date in `'YYYY-MM-DD'` format. Default is `2023-12-31`.
-  - Example: `--to-date 2022-12-31`
+- **`--from-date`**: Start date in `'YYYY-MM-DD'` format. Default is `2024-01-01`.
+  - Example: `--from-date 2024-01-01`
+- **`--to-date`**: End date in `'YYYY-MM-DD'` format. Default is `2024-12-31`.
+  - Example: `--to-date 2024-12-31`
 - **`values`**: A list of subreddits to process. If this argument is not provided, the script expects a CSV file as input via `--file`.
 
 ### Example Usage
