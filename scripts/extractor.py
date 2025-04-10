@@ -2,7 +2,6 @@ import json
 import os
 from datetime import datetime
 
-import networkx as nx
 import pandas as pd
 from archive_reader import log, read_lines_zst
 
@@ -48,7 +47,7 @@ def update_subreddit_from_submissions_zst(
 
         try:
             obj = json.loads(line)
-            user = f"u/{obj['author']}"
+            user: str = obj['author']
             created = datetime.fromtimestamp(int(obj["created_utc"]))
             date = created.strftime("%Y-%m-%d")
             if created < from_date:
@@ -57,23 +56,18 @@ def update_subreddit_from_submissions_zst(
                 # Assuming that lines are sorted by date
                 break
 
-            if user == "u/[deleted]":
+            if user == "[deleted]":
                 continue  # Ignore deleted users
 
             if user not in subreddit_data[subreddit_name]:
                 # New user: Add entry
                 subreddit_data[subreddit_name][user] = {
-                    "postdates": [date],
+                    # "postdates": [date],
                     "postfrequency": 1,
                 }
             else:
-                # Existing user: Append date if it's not a duplicate
-                # TODO: Why not increment postfrequency if date is duplicate?
-                # TODO: Do we even need exact postdates
-                # @RVNayan
-                if date not in subreddit_data[subreddit_name][user]["postdates"]:
-                    subreddit_data[subreddit_name][user]["postdates"].append(date)
-                    subreddit_data[subreddit_name][user]["postfrequency"] += 1
+                # subreddit_data[subreddit_name][user]["postdates"].append(date)
+                subreddit_data[subreddit_name][user]["postfrequency"] += 1
 
         except (KeyError, json.JSONDecodeError) as err:
             bad_lines += 1
@@ -85,10 +79,7 @@ def update_subreddit_from_submissions_zst(
                 log.warning(line)
 
     subreddit_data[subreddit_name] = {
-        user: {
-            "postdates": list(details["postdates"]),
-            **{k: v for k, v in details.items() if k != "postdates"},
-        }
+        user: details
         for user, details in subreddit_data[subreddit_name].items()
         if details["postfrequency"] >= min_posts
     }
@@ -99,56 +90,41 @@ def extract_subreddit_submissions(
     input_file: str,
     from_date: datetime,
     to_date: datetime,
-    json_path="./output/posts.json",
-    graph_path="./output/graph.graphml",
+    json_path: str | None = None,
+    csv_output_dir: str = "output/csv/",
     min_posts=1,
 ):
-    subreddit_data = load_existing_json_data(json_path)
+    if json_path == "":
+        json_path = None
+
+    if json_path is not None:
+        subreddit_data = load_existing_json_data(json_path)
+    else:
+        subreddit_data = {}
 
     update_subreddit_from_submissions_zst(
         input_file, subreddit_name, subreddit_data, from_date, to_date, min_posts
     )
 
     # Save updated JSON file
-    with open(json_path, "w") as file:
-        json.dump(subreddit_data, file, indent=4)
+    if json_path is not None:
+        with open(json_path, "w") as file:
+            json.dump(subreddit_data, file, indent=4)
+
+    if not os.path.exists(csv_output_dir):
+        os.mkdir(csv_output_dir)
+    df = pd.DataFrame(
+        [
+            [user, d["postfrequency"]]
+            for user, d in subreddit_data[subreddit_name].items()
+        ],
+    )
+    df.sort_values(by=0, ascending=True, inplace=True)
+    df.to_csv(
+        os.path.join(csv_output_dir, f"{subreddit_name}.csv"), header=False, index=False
+    )
 
     print(f"Updated data for subreddit: {subreddit_name}")
-
-    # Load existing graph if available, otherwise create a new graph
-    if os.path.exists(graph_path) and os.path.getsize(graph_path) > 0:
-        try:
-            G = nx.read_graphml(graph_path)
-            print("Existing graph loaded.")
-        except Exception as e:
-            print(
-                f"Warning: Unable to load existing graph. Creating a new one. Error: {e}"
-            )
-            G = nx.Graph()
-    else:
-        print("No existing graph found. Creating a new one.")
-        G = nx.Graph()
-
-    # Add subreddit node if not already present
-    if subreddit_name not in G:
-        G.add_node(subreddit_name, bipartite=0, type="subreddit")
-
-    # Add user nodes and edges (with minimum post threshold)
-    for user, details in subreddit_data[subreddit_name].items():
-        if details["postfrequency"] < min_posts:
-            continue  # Ignore users with post count below threshold
-
-        if user not in G:
-            G.add_node(user, bipartite=1, type="user")
-
-        if not G.has_edge(user, subreddit_name):  # Ensure user is the source
-            G.add_edge(user, subreddit_name, weight=details["postfrequency"])
-        else:
-            G[user][subreddit_name]["weight"] += details["postfrequency"]
-
-    # Export the updated graph
-    nx.write_graphml(G, graph_path)
-    print(f"Graph updated and exported to {graph_path}")
 
 
 if __name__ == "__main__":
@@ -164,4 +140,6 @@ if __name__ == "__main__":
 
     for subname in sublists:
         input_file = f"./data/archived_submissions/{subname}_submissions.zst"
-        extract_subreddit_submissions(subname, input_file, from_date, to_date)
+        extract_subreddit_submissions(
+            subname, input_file, from_date, to_date, "output/csv/"
+        )

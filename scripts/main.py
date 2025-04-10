@@ -20,13 +20,13 @@ def main():
         "--json-output",
         type=str,
         help="JSON output location",
-        default="output.json",
+        default="",
     )
     parser.add_argument(
-        "--graph-output",
+        "--csv-output-dir",
         type=str,
-        help="Graph output location",
-        default="output.graphml",
+        help="CSV output location",
+        default="output/csv/",
     )
     parser.add_argument(
         "--torrent-file",
@@ -92,7 +92,7 @@ def main():
     print(f"Processing the following subreddits: {subreddits}")
 
     json_path = args.json_output
-    graph_path = args.graph_output
+    csv_output_dir = args.csv_output_dir
     download_dir = args.download_dir
     torrent_path = args.torrent_file
 
@@ -117,13 +117,13 @@ def main():
     for sub in dumped_data_paths:
         print(f"Processing {sub}...")
         extract_subreddit_submissions(
-            sub,
-            dumped_data_paths[sub],
-            from_date,
-            to_date,
-            json_path,
-            graph_path,
-            args.post_threshold,
+            subreddit_name=sub,
+            input_file=dumped_data_paths[sub],
+            from_date=from_date,
+            to_date=to_date,
+            json_path=json_path,
+            csv_output_dir=csv_output_dir,
+            min_posts=args.post_threshold,
         )
         print("-" * 40)
 

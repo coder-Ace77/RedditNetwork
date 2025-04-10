@@ -18,8 +18,8 @@ You can provide the following arguments when running the script:
   - Example: `--file subreddits.csv`
 - **`--json-output`**: Path where the JSON output will be saved. The default is `output.json`.
   - Example: `--json-output results.json`
-- **`--graph-output`**: Path where the GraphML output will be saved. The default is `output.graphml`.
-  - Example: `--graph-output results.graphml`
+- **`--csv-output-dir`**: Path where the CSV output will be saved. The default is `output/csv/`.
+  - Example: `--csv-output-dir output/csv/`
 - **`--torrent-file`**: Path to the Reddit data torrent file. The default is `reddit.torrent`.
   - Example: `--torrent-file reddit_data.torrent`
 - **`--download-dir`**: Directory to store downloaded datasets. The default is `./data/archived_submissions/`.
@@ -35,13 +35,13 @@ You can provide the following arguments when running the script:
 ### Example Usage
 
 ```bash
-python scripts/main.py --file subreddits.csv --json-output results.json --graph-output results.graphml --torrent-file reddit_data.torrent --download-dir ./data/archived_submissions/ --post-threshold 5 --from-date 2021-01-01 --to-date 2022-12-31
+python scripts/main.py --file subreddits.csv --json-output results.json --csv-output-dir output/csv --torrent-file reddit_data.torrent --download-dir ./data/archived_submissions/ --post-threshold 5 --from-date 2021-01-01 --to-date 2022-12-31
 ```
 
 Or, you can directly provide subreddits as command-line arguments:
 
 ```bash
-python scripts/main.py --json-output results.json --graph-output results.graphml --post-threshold 5 --from-date 2024-01-01 --to-date 2024-12-31 subreddit1 subreddit2 subreddit3
+python scripts/main.py --json-output results.json --csv-output-dir output/csv --post-threshold 5 --from-date 2024-01-01 --to-date 2024-12-31 subreddit1 subreddit2 subreddit3
 ```
 
 #### With default options
@@ -60,9 +60,7 @@ If neither `--file` nor `values` is provided, the script will output an error me
 
 - **JSON Output**: A JSON file containing the extracted subreddit data, user
   activity, and other processed information.
-- **GraphML Output**: A GraphML file representing the subreddit interactions,
-  users, and posts.
-
+- **CSV Output**
 ## Merging files
 
 - If you have multiple `json` `graphml` files and want to merge them, change their names and list them in [graphml_files.csv](utils/graphml_files.csv) and run this [code](utils/mergegml.py). Move these renamed files to utils folder
