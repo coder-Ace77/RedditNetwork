@@ -25,7 +25,7 @@ def main():
     parser.add_argument(
         "--csv-output-dir",
         type=str,
-        help="CSV output location",
+        help="Directory to store CSV files",
         default="output/csv/",
     )
     parser.add_argument(

@@ -112,7 +112,7 @@ def extract_subreddit_submissions(
             json.dump(subreddit_data, file, indent=4)
 
     if not os.path.exists(csv_output_dir):
-        os.mkdir(csv_output_dir)
+        os.makedirs(csv_output_dir, exist_ok=True)
     df = pd.DataFrame(
         [
             [user, d["postfrequency"]]
