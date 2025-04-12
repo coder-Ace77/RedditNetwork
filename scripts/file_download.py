@@ -6,7 +6,6 @@ from typing import Collection, Dict
 import libtorrent as lt
 import pandas as pd
 
-
 def dump_subreddit_submissions(
     subnames: Collection[str], download_dir: str, torrent_path: str
 ) -> Dict[str, str]:
