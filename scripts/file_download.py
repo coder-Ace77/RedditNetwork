@@ -5,6 +5,7 @@ from typing import Collection, Dict
 
 import libtorrent as lt
 import pandas as pd
+from tqdm import tqdm  # For progress bar
 
 def dump_subreddit_submissions(
     subnames: Collection[str], download_dir: str, torrent_path: str
@@ -53,23 +54,27 @@ def dump_subreddit_submissions(
     # Start downloading
     print(f"Downloading {len(selected_indices)} selected files...")
 
-    while True:
-        s = torrent_handle.status()
-        file_progress = torrent_handle.file_progress()
+    # Initialize progress bar
+    with tqdm(total=100, desc="Overall Progress", unit="%", ncols=80) as pbar:
+        while True:
+            s = torrent_handle.status()
+            file_progress = torrent_handle.file_progress()
 
-        # Check if all selected files are fully downloaded
-        if all(
-            file_progress[idx] >= file_storage.file_size(idx)
-            for idx, _ in selected_indices
-        ):
-            print("\nAll selected files downloaded. Stopping torrent...")
-            session.remove_torrent(torrent_handle)  # Removes torrent but keeps files
-            break
+            # Check if all selected files are fully downloaded
+            if all(
+                file_progress[idx] >= file_storage.file_size(idx)
+                for idx, _ in selected_indices
+            ):
+                print("\nAll selected files downloaded. Stopping torrent...")
+                session.remove_torrent(torrent_handle)  # Removes torrent but keeps files
+                break
 
-        # Print progress
-        progress = s.progress * 100
-        print(f"Progress: {progress:.2f}% - Downloaded {s.total_done} bytes", end="\r")
-        time.sleep(5)
+            # Update progress bar
+            progress = s.progress * 100
+            pbar.n = int(progress)
+            pbar.refresh()
+
+            time.sleep(5)
 
     # **Move files to the final location (flatten the structure)**
     for idx, filename in selected_indices:

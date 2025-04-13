@@ -2,3 +2,4 @@ pandas
 networkx
 zstandard
 libtorrent
+tqdm

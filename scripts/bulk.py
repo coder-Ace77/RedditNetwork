@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil  # For moving files
+from scripts.file_download import dump_subreddit_submissions  # Import the function
 
 def process_line():
     list_file = "./data/bulk/list.csv"
@@ -8,6 +9,8 @@ def process_line():
     done_file = "./data/bulk/done.csv"
     output_folder = "./output"
     move_folder = "./placeholder"  # Replace 'placeholder' with the actual folder path
+    torrent_path = "./data/reddit.torrent"  # Path to the torrent file
+    download_dir = "./data/archived_submissions/"  # Directory for downloads
 
     if not os.path.exists(list_file) or os.stat(list_file).st_size == 0:
         print("list.csv is empty or does not exist.")
@@ -34,8 +37,13 @@ def process_line():
 
     print(f"Moved line to {sublist_file}: {lines[0].strip()}")
 
-    print("Running file_download.py...")
-    subprocess.run(["python3", "./scripts/file_download.py"])
+    # Read sublist.csv to get the subnames
+    with open(sublist_file, "r") as file:
+        subnames = [line.strip() for line in file.readlines()]
+
+    # Call dump_subreddit_submissions
+    print("Downloading subreddit submissions...")
+    dump_subreddit_submissions(subnames, download_dir, torrent_path)
 
     print("Running extractor.py...")
     subprocess.run(["python3", "./scripts/extractor.py"])
