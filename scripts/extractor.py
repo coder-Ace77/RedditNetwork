@@ -126,7 +126,7 @@ if __name__ == "__main__":
     to_date = datetime.strptime("2023-12-31", "%Y-%m-%d")
 
     for subname in sublists:
-        input_file = f"./data/archived_submissions/{subname}_submissions.zst"
+        input_file = f"/content/data/archived_submissions/{subname}_submissions.zst"
         extract_subreddit_submissions(
             subname, input_file, from_date, to_date
         )
