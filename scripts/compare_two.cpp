@@ -10,25 +10,22 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-const int  MAX_N = 1000000;
+const int  MAX_N = 2000000;
 
-int compareFiles(const string& file1, const string& file2) {
+int compareFiles(const string& file1, const string& file2){
     vector<string> usernames1;
     vector<string> usernames2;
     usernames1.reserve(MAX_N);
     usernames2.reserve(MAX_N);
     int count1 = 0, count2 = 0;
-
     {
         ifstream file(file1);
         if (!file.is_open()) {
             cerr << "Error: Could not open file " << file1 << endl;
             return 0;
         }
-
         string line;
-        getline(file, line); // Skip header
-
+        getline(file, line); 
         while (getline(file, line)) {
             size_t pos = line.find(',');
             if (pos != string::npos) {
@@ -39,7 +36,7 @@ int compareFiles(const string& file1, const string& file2) {
 
     {
         ifstream file(file2);
-        if (!file.is_open()) {
+        if (!file.is_open()){
             cerr << "Error: Could not open file " << file2 << endl;
             return 0;
         }

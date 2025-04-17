@@ -17,8 +17,8 @@ vector<string> split(const string& line, char delimiter) {
 }
 
 int main() {
-    string input_file = "redits.csv";
-    string output_file = "pairs.csv";
+    string input_file = "file_list.csv";
+    string output_file = "todo.csv";
 
     ifstream infile(input_file);
     ofstream outfile(output_file);
@@ -41,7 +41,7 @@ int main() {
 
     // Read the first column of the first 10,000 rows
     int count = 0;
-    while (getline(infile, line) && count<2000){
+    while (getline(infile, line) && count<10000){
         vector<string> tokens = split(line, ',');
         if(!tokens.empty()){
             subreddits.push_back(tokens[0]);
@@ -52,11 +52,11 @@ int main() {
     infile.close();
 
     // Write the header to the output file
-    outfile << "Subreddit1,Subreddit2\n";
+    outfile << "Subreddit1 Subreddit2\n";
 
     for (size_t i = 0; i < subreddits.size(); ++i) {
         for (size_t j = i + 1; j < subreddits.size(); ++j) {
-            outfile << subreddits[i] << "," << subreddits[j] << "\n";
+            outfile << subreddits[i] << " " << subreddits[j] << "\n";
         }
     }
 
